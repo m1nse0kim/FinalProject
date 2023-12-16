@@ -1,22 +1,4 @@
 $(document).ready(function () {
-  $(document).ready(function () {
-    // 로그인 버튼 클릭 이벤트
-    $(".loginButton").on("click", function () {
-      var user_id = $("#user_id").val();
-      var password = $("#password").val();
-
-      $.post(
-        "/login",
-        { user_id: user_id, password: password },
-        function (data) {
-          if (data.message) {
-            alert(data.message); // 로그인 실패 시 알림
-          }
-        }
-      );
-    });
-  });
-
   $("#user_id").on("keyup", function (e) {
     if (e.key === "Enter") {
       startChat();
