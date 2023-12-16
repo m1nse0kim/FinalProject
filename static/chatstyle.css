@@ -1,0 +1,136 @@
+body {
+  height: 695px;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  height: 100%;
+  width: 390px;
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  /* position: relative; */
+}
+
+.chat-page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background-color: #b5cee2;
+  border-radius: 10px;
+  overflow: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chat {
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.send-message-container {
+  display: flex;
+  align-items: flex-end;
+  float: right;
+  margin: 5px 10px 8px;
+  position: relative;
+  max-width: 320px;
+  clear: both;
+}
+
+.send {
+  width: auto;
+  background-color: #fce305;
+  border-radius: 3px;
+  margin-left: 80px;
+  padding: 4px 7px 5px;
+  font-size: 11px;
+  font-family: Arial;
+  word-break: break-word;
+}
+
+.send-time {
+  width: 50px;
+  background-color: transparent;
+  margin: 8px 28px 1px;
+  font-size: 10px;
+  font-family: Arial;
+  position: absolute;
+}
+
+.receive-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  max-width: 320px;
+  clear: both;
+}
+
+.message-user-id {
+  align-self: flex-start;
+  font-size: 10px;
+  margin-left: 10px;
+  margin-bottom: 3px;
+}
+
+.receive-message-container {
+  display: flex;
+  align-items: flex-start;
+  float: left;
+  margin: 0 8px;
+  position: relative;
+  max-width: 320px;
+  clear: both;
+}
+
+.receive {
+  width: auto;
+  background-color: #ffffff;
+  border-radius: 3px;
+  margin-right: 80px;
+  padding: 4px 7px 5px;
+  font-size: 11px;
+  font-family: Arial;
+  word-break: break-word;
+}
+
+.receive-time {
+  width: 50px;
+  background-color: transparent;
+  margin: 8px 28px 1px;
+  font-size: 10px;
+  font-family: Arial;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.sendBox {
+  width: 390px;
+  height: 140px;
+  background: #ffffff;
+}
+
+.sendBox textarea {
+  border: none;
+  outline: none;
+  resize: none;
+  /* width: 386px; */
+  min-height: 132px;
+  font-family: Arial;
+}
+
+.sendButton {
+  /* position: absolute;
+  right: 10px;
+  bottom: 10px; */
+  margin: 10px 0px 5px;
+  width: 65px;
+  height: 30px;
+  cursor: pointer;
+  background-color: #ffe100;
+  border-radius: 5px;
+  border: none;
+  font-family: Arial;
+}

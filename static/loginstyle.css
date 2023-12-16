@@ -1,0 +1,120 @@
+body {
+  height: 650px;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  height: 100%;
+  width: 350px;
+  background-color: #fee500;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  margin-top: -70px;
+  width: 140px;
+  height: 110px;
+  background-color: #423630;
+  border-radius: 50%;
+  color: #fee500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.container-input-login {
+  width: 250px;
+}
+
+.input-group {
+  margin-bottom: 3px;
+  position: relative;
+}
+
+.input-group input {
+  width: 240px;
+  padding: 10px 0px 10px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.input-group input[type="checkbox"] {
+  width: fit-content;
+}
+
+.password-toggle {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.loginButton {
+  width: 250px;
+  padding: 10px 0;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f6f6f6;
+  color: #acacac;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.signupButton {
+  width: 250px;
+  padding: 10px 0;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #423630;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.loginButton.active:hover,
+.signupButton:hover {
+  background-color: #594941;
+  color: white;
+}
+
+.divider-or {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.divider-line {
+  flex: 1;
+  width: 110px;
+  border-bottom: 1px solid #f1d900;
+  margin: 0 10px;
+}
+
+h5 {
+  margin: 0;
+  color: #b2a000;
+}
+
+.myname {
+  margin: 160px 0px -160px;
+  color: #ead300;
+  font-size: small;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

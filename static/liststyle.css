@@ -1,0 +1,81 @@
+body {
+  height: 650px;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  height: 100%;
+  width: 350px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.list-title {
+  margin: 0 5px;
+  display: flex;
+  align-items: center;
+}
+
+h2 {
+  flex-grow: 1;
+}
+
+.divider-line {
+  align-self: center;
+  text-align: center;
+  width: 350px;
+  border-bottom: 1px solid #ececed;
+  margin: 0 10px;
+}
+
+.list-friend {
+  flex: 1;
+  flex-direction: column;
+}
+
+.nav-bar {
+  width: 390px;
+  height: 40px;
+  display: flex;
+  background-color: #ececed;
+  margin: 0px 0px -20px -20px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.nav-bar > .nav-item {
+  margin: 0px 20px;
+  padding: 5px 20px;
+  font-weight: bold;
+  color: #9f9fa0;
+}
+
+.nav-bar > .nav-item:hover,
+.nav-bar > .nav-item::after {
+  border-radius: 5px;
+  color: #262626;
+}
+
+.addButton {
+  width: 65px;
+  height: 30px;
+  cursor: pointer;
+  color: #9f9fa0;
+  font-weight: bold;
+  font-size: 15px;
+  background-color: transparent;
+  border: none;
+  font-family: Arial;
+}
+
+.addButton:hover {
+  color: #262626;
+}

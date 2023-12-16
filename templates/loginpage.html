@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>KakaoTalk</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/loginstyle.css" />
+    <script src="/static/function.js"></script>
+  </head>
+
+  <script>
+    $(document).ready(function () {
+      $("#user_id, #password").on("input", function () {
+        if ($("#user_id").val().length > 0 && $("#password").val().length > 0) {
+          $(".loginButton").css({
+            "background-color": "#423630",
+            color: "white",
+          });
+        } else {
+          $(".loginButton").css({
+            "background-color": "#f6f6f6",
+            color: "#acacac",
+          });
+        }
+      });
+
+      $("#password").on("input", function () {
+        if ($(this).val().length > 0) {
+          $(".password-toggle").show();
+        } else {
+          $(".password-toggle").hide();
+        }
+      });
+      $(".password-toggle").hide();
+
+      $("#togglePassword").change(function () {
+        if ($(this).is(":checked")) {
+          $("#password").attr("type", "text");
+        } else {
+          $("#password").attr("type", "password");
+        }
+      });
+    });
+  </script>
+
+  <body>
+    <div class="page">
+      <div class="logo">
+        <h1>SKKU<br />TALK</h1>
+      </div>
+
+      <div class="container-input-login">
+        <div class="input-group">
+          <input type="text" id="user_id" placeholder="ID" required />
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <div class="password-toggle">
+            <input type="checkbox" id="togglePassword" />
+          </div>
+        </div>
+      </div>
+      <button type="button" class="loginButton">Login</button>
+      <div class="divider-or">
+        <div class="divider-line"></div>
+        <h5>or</h5>
+        <div class="divider-line"></div>
+      </div>
+      <button type="button" class="signupButton">Signup</button>
+      <div class="myname">@2022310931_MinseoKim</div>
+    </div>
+  </body>
+</html>
