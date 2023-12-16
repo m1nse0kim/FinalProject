@@ -5,43 +5,8 @@
     <title>KakaoTalk</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/loginstyle.css" />
-    <script src="/static/function.js"></script>
+    <script src="/static/functionlogin.js"></script>
   </head>
-
-  <script>
-    $(document).ready(function () {
-      $("#user_id, #password").on("input", function () {
-        if ($("#user_id").val().length > 0 && $("#password").val().length > 0) {
-          $(".loginButton").css({
-            "background-color": "#423630",
-            color: "white",
-          });
-        } else {
-          $(".loginButton").css({
-            "background-color": "#f6f6f6",
-            color: "#acacac",
-          });
-        }
-      });
-
-      $("#password").on("input", function () {
-        if ($(this).val().length > 0) {
-          $(".password-toggle").show();
-        } else {
-          $(".password-toggle").hide();
-        }
-      });
-      $(".password-toggle").hide();
-
-      $("#togglePassword").change(function () {
-        if ($(this).is(":checked")) {
-          $("#password").attr("type", "text");
-        } else {
-          $("#password").attr("type", "password");
-        }
-      });
-    });
-  </script>
 
   <body>
     <div class="page">
@@ -51,7 +16,7 @@
 
       <div class="container-input-login">
         <div class="input-group">
-          <input type="text" id="user_id" placeholder="ID" required />
+          <input type="text" id="user_name" placeholder="ID" required />
         </div>
         <div class="input-group">
           <input

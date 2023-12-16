@@ -5,7 +5,7 @@
     <title>KakaoTalk</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/profile.css" />
-    <script src="/static/function.js"></script>
+    <script src="/static/functionprofile.js"></script>
   </head>
 
   <body>
@@ -17,19 +17,14 @@
       <div class="profile">
         <div class="img">
           <img
-            src="/static/image/basic_profile.jpg"
             id="user_img"
+            src="/static/image/basic_profile.jpg"
             alt="User Profile Image"
           />
+          <input type="file" id="img_upload" style="display: none" />
         </div>
-        <div class="name">
-          username
-          <!-- <input type="text" id="user_id" /> -->
-        </div>
-        <div class="desc">
-          userdescription
-          <!-- <input type="text" id="user_desc" /> -->
-        </div>
+        <div id="user_name" class="name"></div>
+        <div id="user_desc" class="desc"></div>
         <div class="divider-line"></div>
         <button type="button" class="addButton" id="addChat">1:1 chat</button>
       </div>

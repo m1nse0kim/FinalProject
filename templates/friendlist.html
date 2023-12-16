@@ -5,7 +5,7 @@
     <title>KakaoTalk</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/liststyle.css" />
-    <script src="/static/function.js"></script>
+    <script src="/static/functionlist.js"></script>
   </head>
 
   <body>
@@ -15,29 +15,18 @@
         <button type="button" class="addButton" id="addFriend">ADD +</button>
       </div>
       <div class="divider-line"></div>
-      <div class="list-friend">
-        <ul>
-          1
-        </ul>
-        <ul>
-          2
-        </ul>
-        <ul>
-          3
-        </ul>
-        <ul>
-          1
-        </ul>
-        <ul>
-          2
-        </ul>
-        <ul>
-          3
-        </ul>
+      <div id="userModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Add a Friend</h2>
+          <div id="modalUserList"></div>
+        </div>
       </div>
+      <div id="friendList" class="list-friend"></div>
       <div class="nav-bar">
-        <span class="nav-item"> Friend </span>
-        <span class="nav-item"> Chat </span>
+        <button id="profileButton" class="nav-item">Profile</button>
+        <button id="friendButton" class="nav-item">Friend</button>
+        <button id="chatButton" class="nav-item">Chat</button>
       </div>
     </div>
   </body>

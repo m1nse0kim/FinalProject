@@ -5,12 +5,18 @@
     <title>KakaoTalk</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/chatstyle.css" />
-    <script src="/static/function.js"></script>
+    <script src="/static/functionchat.js"></script>
   </head>
 
   <body>
     <div class="page">
       <div class="chat-page">
+        <div class="page-nav">
+          <button type="button" class="backButton">BACK</button>
+          <div id="room_name" class="name"></div>
+          <button type="button" class="hidden"></button>
+        </div>
+        <div class="divider-line"></div>
         <div class="chat" id="messages"></div>
         <div class="sendBox">
           <textarea id="message_input"></textarea>

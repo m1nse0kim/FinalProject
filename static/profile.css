@@ -35,6 +35,11 @@ body {
   margin: 0px 10px;
 }
 
+.closeButton:hover,
+.editButton:hover {
+  color: #bcbdbe;
+}
+
 .profile {
   display: flex;
   flex-direction: column;

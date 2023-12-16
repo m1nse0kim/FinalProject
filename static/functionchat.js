@@ -1,5 +1,13 @@
 $(document).ready(function () {
-  $("#user_id").on("keyup", function (e) {
+  displayUsernameFromCookie();
+  const roomid = window.location.pathname.split("/")[2];
+  startChat(roomid);
+
+  $(".backButton").on("click", function () {
+    window.location.href = `/chatlist`;
+  });
+
+  $("#user_name").on("keyup", function (e) {
     if (e.key === "Enter") {
       startChat();
     }
@@ -25,18 +33,51 @@ $(document).ready(function () {
   });
 });
 
+function displayUsernameFromCookie() {
+  const username = getCookie("username");
+  if (username) {
+    console.log("username: " + username);
+  }
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
 var userId;
 var ws;
 
-function startChat() {
-  userId = $("#user_id").val();
+function startChat(roomId) {
+  userId = getCookie("username");
   if (userId.trim() !== "") {
-    ws = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+    ws = new WebSocket(`ws://localhost:8000/ws/${roomId}/${userId}`);
     console.log("UserId", userId);
     ws.onmessage = function (event) {
       var data = JSON.parse(event.data);
+      updateRoomName(data.participants);
       appendMessage(data);
     };
+  }
+}
+
+function updateRoomName(participants) {
+  var otherParticipants = participants.filter((p) => p !== userId); // 현재 사용자를 제외한 다른 참여자들
+  if (otherParticipants.length > 0) {
+    $("#room_name").text(otherParticipants.join(", ")); // 다른 참여자의 이름을 표시
+  } else {
+    // 참여자가 없을 경우 기본 텍스트 설정
+    $("#room_name").text("No Other");
   }
 }
 
@@ -44,7 +85,7 @@ function sendMessage() {
   var message = $("#message_input").val();
   if (message && message.trim() !== "") {
     if (ws && ws.readyState === WebSocket.OPEN) {
-      var messageData = { user_id: userId, content: message, type: "send" };
+      var messageData = { user_name: userId, content: message, type: "send" };
       ws.send(JSON.stringify(messageData));
       $("#message_input").val("");
     } else {
@@ -63,7 +104,7 @@ function appendMessage(messageData) {
   });
   var chatMessage = messageData.content.replace(/\n/g, "<br>");
 
-  if (messageData.type === "send" && messageData.user_id === userId) {
+  if (messageData.type === "send" && messageData.user_name === userId) {
     messageContainerClass = "send-message-container";
     messageClass = "send";
     messageTime = "send-time";
@@ -78,7 +119,7 @@ function appendMessage(messageData) {
     messageTime = "receive-time";
     messageElement =
       `<div class="receive-message">` +
-      `<div class="message-user-id">${messageData.user_id}</div>` +
+      `<div class="message-user-id">${messageData.user_name}</div>` +
       `<div class="${messageContainerClass}">` +
       `<div class="${messageClass}">${chatMessage}</div>` +
       `<div class="${messageTime}">${time}</div>` +
