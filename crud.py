@@ -112,14 +112,6 @@ def get_chat_rooms_for_user(db: Session, user_name: str):
         'last_message': room.last_message
     } for room in rooms]
 
-    return [{
-        'room_id': room.room_id,
-        'room_name': room.room_name,
-        'last_message': room.last_message,
-        'last_message_time': room.last_message_time.isoformat() if room.last_message_time else None
-    } for room in rooms]
-
-
 def get_participants_in_room(db: Session, room_id: int):
     participants = db.query(RoomParticipant.user_name).filter(RoomParticipant.room_id == room_id).distinct().all()
     return [participant.user_name for participant in participants]

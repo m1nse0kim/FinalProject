@@ -49,6 +49,10 @@ body {
 }
 
 .img {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 5px;
 }
 
@@ -57,6 +61,32 @@ body {
   height: 100px;
   border-radius: 38%;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+#img_upload {
+  margin-top: 10px;
+  background-color: transparent;
+  border: none;
+  color: #f2f3f5;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+#img_upload:hover {
+  color: #bcbdbe;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: #f2f3f5;
+  color: #788590;
+  border: none;
+  border-radius: 10px;
+  padding: 2px 6px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  &:hover {
+    background: rgb(77, 77, 77);
+    color: #fff;
+  }
 }
 
 .name {
@@ -69,20 +99,21 @@ body {
 .desc {
   color: #f2f3f5;
   font-size: 15px;
-  margin-bottom: 10px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .name input[type="text"],
 .desc input[type="text"] {
   width: 100%;
-  margin: 5px 0;
-  padding: 10px;
   font-size: 15px;
   color: #f2f3f5;
   background-color: transparent;
   border: none;
   text-align: center;
+}
+
+.desc input[type="text"] {
+  border-bottom: 1px solid #f2f3f5;
 }
 
 .name input[type="text"]:focus,

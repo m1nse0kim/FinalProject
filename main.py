@@ -1,4 +1,4 @@
-import json
+import json, os
 from fastapi import FastAPI, WebSocket, Request, Depends, Response, HTTPException, APIRouter, Form, File, UploadFile
 from fastapi.templating import Jinja2Templates
 from fastapi.logger import logger
@@ -17,6 +17,8 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 Base.metadata.create_all(bind=engine)
+
+IMAGE_STORE_PATH = "static/image"
 
 class ConnectionManager:
     def __init__(self):
@@ -108,15 +110,20 @@ async def profile(request: Request, username: str, db: Session = Depends(get_db)
     
 @app.get("/api/profile/{username}")
 async def get_profile_data(username: str, db: Session = Depends(get_db)):
-    profile_data = get_profile(db, username)
-    if profile_data:
-        return {
-            "username": profile_data.username,
-            "description": profile_data.description or "No description provided.",
-            "image": profile_data.image or "/static/default_profile.jpg"
-        }
-    else:
-        raise HTTPException(status_code=404, detail="Profile not found")
+    try:
+        profile_data = get_profile(db, username)
+        if profile_data:
+            return {
+                "username": profile_data.username,
+                "description": profile_data.description or "No description provided.",
+                "image": profile_data.image or "/static/default_profile.jpg"
+            }
+        else:
+            raise HTTPException(status_code=404, detail="Profile not found")
+    except Exception as e:
+        # 오류 로깅을 위한 추가 코드
+        print(f"An error occurred: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @app.get("/users")
 async def get_users(request: Request, db: Session = Depends(get_db)):
@@ -176,10 +183,22 @@ async def add_friend(request: Request, db: Session = Depends(get_db)):
     db.commit()
     return JSONResponse(status_code=200, content={"message": "친구가 추가되었습니다.", "success": True})
 
+async def save_image_file(image_file: UploadFile) -> str:
+    file_path = os.path.join(IMAGE_STORE_PATH, image_file.filename)
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, "wb") as file:
+        content = await image_file.read()
+        file.write(content)
+    return f"/{file_path}"
+
 @app.post("/api/profile/update/{username}")
 async def update_profile_data(username: str, description: str = Form(...), image: UploadFile = File(...), db: Session = Depends(get_db)):
-    update_profile(db, username, description, await image.read())
-    return {"success": True, "message": "Profile updated successfully."}
+    try:
+        image_path = await save_image_file(image)
+        update_profile(db, username, description, image_path)
+        return {"success": True, "message": "Profile updated successfully."}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"message": f"Internal server error: {e}"})
 
 @app.post("/api/chat/create")
 async def create_chat(request: Request, db: Session = Depends(get_db)):

@@ -30,6 +30,7 @@ $(document).ready(function () {
       $(this).text("SAVE"); // 버튼 텍스트를 'SAVE'로 변경
     } else {
       // 'SAVE' 상태일 때, 서버에 업데이트 요청을 보냄
+      $(".profile").removeClass("edit-mode"); // 클래스 제거
       const newDesc = $("#desc_edit").val();
       const newImage = $("#img_upload")[0].files[0]; // 파일을 가져옴
 
@@ -78,6 +79,17 @@ $(document).ready(function () {
         }
       })
       .catch((error) => console.error("Error:", error));
+  });
+
+  // 이미지 미리보기 기능
+  $("#img_upload").on("change", function () {
+    if (this.files && this.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $("#user_img").attr("src", e.target.result);
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
   });
 });
 
