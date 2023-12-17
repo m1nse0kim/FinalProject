@@ -65,19 +65,9 @@ function startChat(roomId) {
     console.log("UserId", userId);
     ws.onmessage = function (event) {
       var data = JSON.parse(event.data);
-      updateRoomName(data.participants);
+      console.log("data", data);
       appendMessage(data);
     };
-  }
-}
-
-function updateRoomName(participants) {
-  var otherParticipants = participants.filter((p) => p !== userId); // 현재 사용자를 제외한 다른 참여자들
-  if (otherParticipants.length > 0) {
-    $("#room_name").text(otherParticipants.join(", ")); // 다른 참여자의 이름을 표시
-  } else {
-    // 참여자가 없을 경우 기본 텍스트 설정
-    $("#room_name").text("No Other");
   }
 }
 

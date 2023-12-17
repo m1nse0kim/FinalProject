@@ -74,7 +74,7 @@ def update_profile(db: Session, username: str, description: str, image: str):
         db.refresh(db_profile)
     return db_profile
 
-def create_chat_room(db: Session, user_name: str, room_name: str):
+def create_chat_room(db: Session, user_name: str, room_name: str,  participant_usernames: list):
     existing_room = db.query(ChatRoom).filter(
         or_(
             and_(ChatRoom.user_name == user_name, ChatRoom.room_name == room_name),
@@ -88,29 +88,22 @@ def create_chat_room(db: Session, user_name: str, room_name: str):
     db.add(new_room)
     db.commit()
     db.refresh(new_room)
+
+    for username in participant_usernames:
+        add_room_participant(db, new_room.room_id, username)
+
     return new_room
 
 def get_messages_by_room(db: Session, room_id: int):
     return db.query(Message).filter(Message.room_id == room_id).all()
 
 def get_chat_rooms_for_user(db: Session, user_name: str):
-    rooms = db.query(
-        ChatRoom.room_id,
-        ChatRoom.user_name,
-        ChatRoom.room_name,
-        func.max(Message.created_at).label('last_message_time'),
-        func.max(Message.content).label('last_message')
-    ).outerjoin(Message, ChatRoom.room_id == Message.room_id) \
-    .filter(or_(ChatRoom.user_name == user_name, ChatRoom.room_name == user_name)) \
-    .group_by(ChatRoom.room_id, ChatRoom.user_name, ChatRoom.room_name) \
-    .order_by(func.max(Message.created_at).desc()) \
-    .all()
-
-    return [{
-        'room_id': room.room_id,
-        'room_name': room.room_name if room.user_name == user_name else room.user_name,
-        'last_message': room.last_message
-    } for room in rooms]
+    # Include rooms where the user is a participant
+    rooms_as_creator = db.query(ChatRoom).filter(ChatRoom.user_name == user_name)
+    rooms_as_participant = db.query(ChatRoom).join(RoomParticipant, RoomParticipant.room_id == ChatRoom.room_id).filter(RoomParticipant.user_name == user_name)
+    
+    all_rooms = rooms_as_creator.union(rooms_as_participant).all()
+    return all_rooms
 
 def get_participants_in_room(db: Session, room_id: int):
     participants = db.query(RoomParticipant.user_name).filter(RoomParticipant.room_id == room_id).distinct().all()

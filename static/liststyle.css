@@ -134,7 +134,23 @@ h2 {
   float: right;
 }
 
+.button-newchat {
+  height: 30px;
+  cursor: pointer;
+  color: #9f9fa0;
+  font-weight: bold;
+  font-size: 17px;
+  background-color: transparent;
+  border: none;
+  font-family: Arial;
+}
+
 .addButton:hover,
-.addButton2:hover {
+.addButton2:hover,
+.button-newchat:hover {
   color: #262626;
+}
+
+.checkbox-float-right {
+  float: right;
 }

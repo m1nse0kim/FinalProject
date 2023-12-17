@@ -4,14 +4,16 @@ from fastapi.templating import Jinja2Templates
 from fastapi.logger import logger
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
+from sqlalchemy import distinct
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func, or_
 
 from database import SessionLocal
 from database import engine, Base
 from crud import create_user, get_user_by_username, get_user_friends, get_users_except_friends, add_friend, get_profile, update_profile, create_message, get_messages_by_room, create_chat_room, get_chat_rooms_for_user, get_participants_in_room, add_room_participant
 from schema import LoginRequest, SignupRequest
 
-from models import User, Friend, Message
+from models import User, Friend, Message, ChatRoom, RoomParticipant
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -84,7 +86,32 @@ async def client(request: Request):
 
 @app.get("/api/chat/rooms/{username}")
 async def get_user_chat_rooms(username: str, db: Session = Depends(get_db)):
-    rooms = get_chat_rooms_for_user(db, username)
+    rooms_info = db.query(
+        ChatRoom.room_id,
+        func.group_concat(distinct(RoomParticipant.user_name)).label('participants'),
+        Message.content.label('last_message'),
+        func.max(Message.created_at).label('last_message_time'),
+        # func.group_concat(distinct(RoomParticipant.user_name)).label('participants')
+    ).join(RoomParticipant, RoomParticipant.room_id == ChatRoom.room_id) \
+     .outerjoin(Message, Message.room_id == ChatRoom.room_id) \
+     .filter(RoomParticipant.user_name != username) \
+     .group_by(ChatRoom.room_id) \
+     .order_by(func.max(Message.created_at).desc()) \
+     .all()
+    rooms = []
+    for info in rooms_info:
+        # 참가자 이름을 콤마로 구분하여 분리합니다.
+        participant_usernames = set(info.participants.split(',')) if info.participants else set()
+        # 현재 사용자를 제외한 참가자의 이름만을 리스트로 가져옵니다.
+        participant_usernames.discard(username)  # 현재 사용자 이름을 목록에서 제거합니다.
+        room_name = ', '.join(participant_usernames) if participant_usernames else 'No participants'
+        rooms.append({
+            "room_id": info.room_id,
+            "room_name": room_name,
+            "last_message": info.last_message,
+            "last_message_time": info.last_message_time.isoformat() if info.last_message_time else None
+        })
+
     return {"rooms": rooms}
 
 @app.get("/friends")
@@ -204,13 +231,33 @@ async def update_profile_data(username: str, description: str = Form(...), image
 async def create_chat(request: Request, db: Session = Depends(get_db)):
     data = await request.json()
     room_name = data['room_name']
+    participant_usernames = data.get('participant_usernames', [])
 
     user_name = request.cookies.get('username')
     if not user_name:
         raise HTTPException(status_code=401, detail="User not authenticated")
     
-    new_room = create_chat_room(db, user_name, room_name)
+    new_room = create_chat_room(db, user_name, room_name, participant_usernames)
     return {"success": True, "room_id": new_room.room_id}
+
+@app.post("/api/chat/create-multiple")
+async def create_multiple_chat(request: Request, db: Session = Depends(get_db)):
+    data = await request.json()
+    usernames = data['usernames']
+    current_user = request.cookies.get('username')
+    
+    # 새로운 채팅방 이름을 현재 사용자와 선택된 사용자들의 이름을 합쳐서 생성
+    room_name = f"{', '.join(usernames)}"
+    
+    # 채팅방 생성
+    new_room = create_chat_room(db, current_user, room_name, usernames)
+    
+    # 채팅방에 사용자들을 추가
+    for username in usernames:
+        add_room_participant(db, new_room.room_id, username)
+    add_room_participant(db, new_room.room_id, current_user)
+    
+    return JSONResponse(status_code=200, content={"success": True, "room_id": new_room.room_id})
 
 def run():
     import uvicorn

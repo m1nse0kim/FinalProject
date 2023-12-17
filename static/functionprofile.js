@@ -59,6 +59,10 @@ $(document).ready(function () {
   });
 
   $(".addButton").on("click", function () {
+    const currentUsername = getCookie("username");
+    const targetUsername = window.location.pathname.split("/")[2];
+    const roomName = `${currentUsername}, ${targetUsername}`;
+
     // 채팅방 생성 요청
     fetch(`/api/chat/create`, {
       method: "POST",
@@ -66,7 +70,8 @@ $(document).ready(function () {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        room_name: username,
+        room_name: roomName,
+        participant_usernames: [targetUsername],
       }),
     })
       .then((response) => response.json())
@@ -75,7 +80,7 @@ $(document).ready(function () {
           // 생성된 채팅방의 ID로 채팅 페이지로 이동
           window.location.href = `/chat/${data.room_id}`;
         } else {
-          console.error("Failed to create chat room");
+          console.error("Failed to create chat room", data.message);
         }
       })
       .catch((error) => console.error("Error:", error));
